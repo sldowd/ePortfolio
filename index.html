@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sarah Dowd | ePortfolio</title>
+  <meta name="description" content="ePortfolio of Sarah Dowd, Computer Science capstone (CS-499): enhanced software design, algorithms, and database artifacts with narratives and a professional self-assessment.">
+  <style>
+    :root {
+      --bg: #fafaf8;
+      --text: #1d1d1f;
+      --muted: #5c5c63;
+      --accent: #1f4e79;
+      --card: #ffffff;
+      --border: #dcdcd6;
+      --todo: #8a5a00;
+      --todo-bg: #fff4d6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #16171a;
+        --text: #ececec;
+        --muted: #a6a6ad;
+        --accent: #8fb8e0;
+        --card: #1f2024;
+        --border: #34363c;
+        --todo: #f2c46d;
+        --todo-bg: #3a2f14;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #16171a;
+      --text: #ececec;
+      --muted: #a6a6ad;
+      --accent: #8fb8e0;
+      --card: #1f2024;
+      --border: #34363c;
+      --todo: #f2c46d;
+      --todo-bg: #3a2f14;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    header, main, footer {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    header { padding-top: 40px; }
+    h1 { font-size: 2rem; margin: 0 0 4px; }
+    h2 { font-size: 1.4rem; margin: 40px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1.1rem; margin: 0 0 6px; }
+    p { margin: 0 0 12px; }
+    .subtitle { color: var(--muted); margin: 0 0 20px; }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      padding: 0;
+      margin: 16px 0 0;
+    }
+    nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    nav a:hover, nav a:focus { text-decoration: underline; }
+    a { color: var(--accent); }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .card ul { margin: 8px 0 0; padding-left: 18px; }
+    .card li { margin-bottom: 4px; }
+    .todo {
+      background: var(--todo-bg);
+      color: var(--todo);
+      border-radius: 4px;
+      padding: 0 4px;
+      font-size: 0.92em;
+    }
+    .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+    footer {
+      margin-top: 48px;
+      padding-bottom: 40px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Sarah Dowd</h1>
+  <p class="subtitle">Computer Science, Southern New Hampshire University | ePortfolio</p>
+  <nav aria-label="Main">
+    <ul>
+      <li><a href="#self-assessment">Self-Assessment</a></li>
+      <li><a href="#code-review">Code Review</a></li>
+      <li><a href="#artifacts">Artifacts</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <section id="self-assessment">
+    <h2>Professional Self-Assessment</h2>
+    <p>
+      <span class="todo">TODO: Paste the final self-assessment text here, or link to a self-assessment page.</span>
+    </p>
+    <p>
+      <a href="#" class="todo">Read the full self-assessment</a>
+    </p>
+  </section>
+
+  <section id="code-review">
+    <h2>Code Review (Milestone One)</h2>
+    <p>
+      My informal code review walks through the original client management application, the code analysis, and the enhancement plan for the artifacts in this portfolio.
+    </p>
+    <p>
+      <a href="#" class="todo">TODO: Add the YouTube link to the code review video</a>
+    </p>
+  </section>
+
+  <section id="artifacts">
+    <h2>Artifacts</h2>
+    <p>Each artifact includes the original version, the enhanced version, and a narrative explaining the enhancement and what I learned.</p>
+
+    <div class="grid">
+
+      <article class="card">
+        <p class="label">Enhancement One | Software Design and Engineering</p>
+        <h3>Client Management Application (C++ to Rust)</h3>
+        <p>A C++ command-line client management application, ported to Rust with role-based access, hashed passwords, and typed service codes.</p>
+        <ul>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_one/original_cms_cpp">Original C++ version</a></li>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_one/cms_rust_port">Enhanced Rust version</a></li>
+          <li><a href="#" class="todo">Narrative (TODO)</a></li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="label">Enhancement Two | Algorithms and Data Structures</p>
+        <h3>Grazioso Salvare Dashboard: Weighted Scoring</h3>
+        <p>A Python and Dash dashboard that replaces exact-match rescue queries with a weighted fit-scoring algorithm and ranked results.</p>
+        <ul>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_two_and_three/original_code">Original version</a></li>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_two_and_three">Enhanced version</a></li>
+          <li><a href="#" class="todo">Narrative (TODO)</a></li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <p class="label">Enhancement Three | Databases</p>
+        <h3>Grazioso Salvare Data Layer: Validation and Access Control</h3>
+        <p>A MongoDB data-access module with an allow-list query validator, document validation, a read-only mode, and least-privilege database users.</p>
+        <ul>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_two_and_three/original_code">Original version</a></li>
+          <li><a href="https://github.com/sldowd/ePortfolio/tree/main/artifact_two_and_three">Enhanced version</a></li>
+          <li><a href="#" class="todo">Narrative (TODO)</a></li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>
+      <span class="todo">TODO: Add email and LinkedIn (optional)</span>
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Source code for this portfolio is available on <a href="https://github.com/sldowd/ePortfolio">GitHub</a>.</p>
+</footer>
+
+</body>
+</html>
