@@ -1,0 +1,8 @@
+[package]
+name = "cms_rust_port"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+argon2 = "0.6.0"
+rpassword = "7.5"

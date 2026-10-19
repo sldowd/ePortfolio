@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+env/
+
+# Environment variables
+.env
+
+# Python
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# Logs
+*.log
+
+# Mac
+.DS_Store
+
+# Data files
+animals.json
+*.json

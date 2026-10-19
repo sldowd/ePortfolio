@@ -1,0 +1,17 @@
+# Core Data & Database
+numpy==2.3.5
+pandas==2.3.3
+pymongo==4.15.4
+python-dotenv==1.2.1
+
+# Jupyter (for development/testing)
+jupyter==1.1.1
+
+# Dash Framework & Components
+dash==2.18.2
+dash-bootstrap-components==1.6.0
+dash-leaflet==1.0.15
+
+
+# Visualization
+plotly==5.24.1
