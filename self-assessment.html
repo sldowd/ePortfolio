@@ -111,6 +111,11 @@
 <body>
     <header>
         <h3>Self-Assessment</h3>
+        <nav>
+          <ul>
+            <li><a href="index.html">Back to main page</a></li>
+          </ul>
+        </nav>
     </header>
 </body>
 <main>
@@ -137,7 +142,7 @@
             trade-offs involved in choosing one over another. I can now evaluate a language based on a project's requirements, 
             including considerations such as compiled versus interpreted execution, performance, and memory safety, rather than 
             defaulting to the language I already know.
-            <br>
+            <br><br>
             The course that changed my understanding most was Software Reverse Engineering. Decoding a compiled binary 
             instruction by instruction showed me how software interacts with the machine, and that knowledge makes higher-level 
             languages easier to reason about. My security coursework deepened that understanding further. Learning how vulnerabilities 
@@ -164,12 +169,15 @@
     <h3>Communicating with stakeholders</h3>
     <p>
         <span>
-            <!-- !! REVIEW !! -->
-            My experience in customer-facing roles taught me that effective communication starts with understanding what the other person 
-            needs, rather than simply providing information. As a bartender and server, I learned to ask questions, clarify expectations, 
-            and explain options in a way that helped customers make informed decisions. I see the same principle applying to software 
-            development, where stakeholders may understand the problem they want solved without knowing the technical details of the solution.
-            <br>
+            My experience in customer-facing roles taught me that effective communication starts with understanding what the other person needs, 
+            rather than simply providing information. I find that when communicating technical concepts to a non-technical audience, it’s helpful 
+            to employ analogous terms they are familiar with. For example, when explaining public key cryptography, I have used the analogy of a 
+            locked mailbox with a slot. The slot is the same as the public key, anyone can put a message in the mailbox. The private key, like the 
+            key to the mailbox is the only way to retrieve, or in this case decrypt, the message. The most important part of communicating in any 
+            circumstance is understanding your audience and conveying information in a way that is accessible to them. I see the same principle 
+            applying to software development, where stakeholders may understand the problem they want solved without knowing the technical details 
+            of the solution.
+            <br><br>
             My coursework at SNHU also helped me become more receptive to feedback. Early on, I focused on making the requested changes. 
             Over time, I learned to use feedback to find gaps in my understanding and improve my next iteration. I want to carry that approach 
             into a professional environment by asking clarifying questions, communicating technical trade-offs in accessible language, and 
@@ -226,21 +234,21 @@
             user’s password is now stored as an individually salted Argon2 hash. Implementing it taught me how the stored hash string holds its 
             algorithm, parameters, and salt, and how verification recomputes the hash with that same salt. The port also showed a remaining risk: 
             the admin credential is still a hardcoded hash in the source, which I would move to a secrets store in production.
-            <br>
+            <br><br>
             The Grazioso Salvare dashboard (Enhancement Two) taught me that a better algorithm changes what users see. Exact-match queries returned 
             only 4 to 17 candidates per rescue profile. A weighted scoring model (breed 40, sex 30, age 30, with partial credit for age) and a 
             minimum score of 70 surfaced 264, 23, and 26 additional near-matches across the three profiles, and none of the original perfect-score 
             matches were lost. The cutoff was necessary because the charts and map read from the same table, so ranking every animal would have 
             made them describe the whole shelter. The trade-off was time: scoring all records in memory takes 12 to 18 milliseconds at this scale. 
             That was acceptable here, but it’s the kind of cost I’d need to reassess as the dataset grows.
-            <br>
+            <br><br>
             The Grazioso Salvare data layer (Enhancement Three) taught me that validation and permissions protect against different failures. 
             The allow-list stops malicious queries, and the read-only database user limits damage if something gets through. Testing exposed a 
             gap in my first version: a delete filter using $ne could match nearly every record and defeat the empty-filter guard. I fixed it by 
             restricting update and delete to exact-match operators. I discovered that the original connection check did not reliably establish 
             that the database was reachable, because the driver connects lazily. The layer now raises explicit errors and is covered by 23 unit 
             tests.
-            <br>
+            <br><br>
             Together, these enhancements reflect the same principle: making assumptions explicit so they can be examined, enforced, and tested. 
             In the CMS port, the type system and role checks enforce rules that the original program left implicit. In the data layer, the 
             allow-list and database permissions define which operations are permitted and limit the consequences when something goes wrong. 
