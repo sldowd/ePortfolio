@@ -68,6 +68,20 @@
     nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
     nav a:hover, nav a:focus { text-decoration: underline; }
     a { color: var(--accent); }
+    .preview {
+      position: relative;
+      max-height: 9.5em;
+      overflow: hidden;
+    }
+    .preview::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3em;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+    }
     .grid {
       display: grid;
       gap: 16px;
@@ -126,12 +140,21 @@
 <main>
 
   <section id="self-assessment">
-    <h2>Profeessional Self-Assessment</h2>
+    <h2>Professional Self-Assessment</h2>
+    <div class="preview">
+      <p>
+        Before studying computer science, I worked as a bartender and server, where I learned to stay calm under pressure and 
+        solve problems for people in real time. I then completed a full-stack web development bootcamp through the University 
+        of Pennsylvania. I enrolled at SNHU to go deeper than web development and earn a bachelor’s degree in computer science...
+      </p>
+      <p>
+        My strongest asset is a habit of going a few layers deeper than the task requires. When I started the program, my 
+        programming experience was primarily in full-stack web development with JavaScript. Since then, I've worked with 
+        C++, Python, and Rust, developing an understanding...
+      </p>
+    </div>
     <p>
-      <span class="todo">TODO: Paste the final self-assessment text here, or link to a self-assessment page.</span>
-    </p>
-    <p>
-      <a href="#" class="todo">Read the full self-assessment</a>
+      <a href="self-assessment.html">Read the full self-assessment</a>
     </p>
   </section>
 
