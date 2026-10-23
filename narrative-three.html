@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sarah Dowd | Enhancement Three Narrative</title>
+  <meta name="description" content="Enhancement Three: Databases. Narrative for CS-499 ePortfolio, Sarah Dowd.">
+  <style>
+    :root { --bg:#fafaf8; --text:#1d1d1f; --muted:#5c5c63; --accent:#1f4e79; --card:#ffffff; --border:#dcdcd6; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --bg:#16171a; --text:#ececec; --muted:#a6a6ad; --accent:#8fb8e0; --card:#1f2024; --border:#34363c; }
+    }
+    :root[data-theme="dark"] { --bg:#16171a; --text:#ececec; --muted:#a6a6ad; --accent:#8fb8e0; --card:#1f2024; --border:#34363c; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height:1.65; }
+    header, main, footer { max-width:760px; margin:0 auto; padding:0 16px; }
+    header { padding-top:32px; }
+    .back { font-size:0.95rem; font-weight:600; text-decoration:none; color:var(--accent); }
+    .back:hover, .back:focus { text-decoration:underline; }
+    .label { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:24px 0 4px; }
+    h1 { font-size:2rem; margin:0 0 6px; line-height:1.2; }
+    .subtitle { color:var(--muted); margin:0 0 8px; }
+    nav ul { list-style:none; display:flex; flex-wrap:wrap; gap:6px 16px; padding:0; margin:12px 0 0; font-size:0.95rem; }
+    nav a { color:var(--accent); text-decoration:none; }
+    nav a[aria-current="page"] { font-weight:700; color:var(--text); }
+    nav a:hover, nav a:focus { text-decoration:underline; }
+    h2 { font-size:1.35rem; margin:40px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+    p { margin:0 0 14px; }
+    strong { font-weight:650; }
+    a { color:var(--accent); }
+    pre { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:12px 14px; overflow-x:auto; font-size:0.9rem; line-height:1.5; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .data-table { width:100%; border-collapse:collapse; margin:8px 0 20px; font-size:0.95rem; }
+    .data-table th, .data-table td { border:1px solid var(--border); padding:8px 10px; text-align:left; }
+    .data-table th { background:var(--card); }
+    .figure { margin:24px 0 28px; text-align:center; }
+    .figure img { display:block; max-width:420px; width:100%; height:auto; margin:0 auto; border:1px solid var(--border); border-radius:6px; }
+    .figure figcaption { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+    footer { margin-top:48px; padding:16px 0 40px; border-top:1px solid var(--border); color:var(--muted); font-size:0.9rem; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">&larr; Back to home</a>
+  <p class="label">Enhancement Three &middot; CS-499</p>
+  <h1>Enhancement Three Narrative</h1>
+  <p class="subtitle">Enhancement Three: Databases</p>
+  <nav aria-label="Enhancements"><ul><li><a href="enhancement-one.html">Enhancement One</a></li><li><a href="enhancement-two.html">Enhancement Two</a></li><li><a href="enhancement-three.html" aria-current="page">Enhancement Three</a></li></ul></nav>
+</header>
+<main>
+<h2>The Artifact</h2>
+<p>The artifact is the Grazioso Salvare dashboard and its data-access module, a full-stack Python application that helps identify rescue-dog candidates from Austin Animal Center shelter data. It uses MongoDB for storage (10,000 records), PyMongo for database access, and a Dash web dashboard for display. I originally built it in CS-340. The part I enhanced for this category is animal_shelter.py, the class that wraps create, read, update, and delete operations against the MongoDB collection.</p>
+<h2>Why It Belongs in My ePortfolio and How It Was Improved</h2>
+<p>I chose this artifact because the data-access layer is where an application meets its database, so it is the natural place to show database skills and a security mindset together. That combination matches the security-focused roles I am targeting. In its original form the module passed whatever query dictionary it received straight to PyMongo. The dashboard has no free-text input today, but the module is reusable, and any future caller could send it a hostile query.</p>
+<p>I added a validation and access-control layer. Queries are checked against an allow-list of field names, value types, and operators before they reach the database, so operators such as $where and $regex are rejected. Documents are validated on create and update for field names, types, length, and required fields. Update and delete refuse an empty filter, and accept only exact-match operators, so one bad call cannot erase the collection. Failures now raise clear exceptions (ValidationError, DatabaseError, PermissionError) instead of being printed and converted into an empty list or zero. The connection is verified with a ping at startup, and credentials are URL-escaped and never appear in error messages. I also added a read-only mode, which the dashboard now uses, and a script that creates a least-privilege read-only database user. The result of the validation is easy to see:</p>
+<pre><code>{'breed': 'Labrador Retriever Mix'} -&gt; accepted
+{'$where': 'sleep(5000)'} -&gt; rejected ($where)
+{'breed': {'$ne': None}} -&gt; rejected (NoneType)
+{'breed': {'$regex': '.*'}} -&gt; rejected ($regex)</code></pre>
+<p>I wrote 23 unit tests that confirm both the legitimate and malicious cases. Each rejection test also checks that nothing reached the database.</p>
+<h2>Course Outcomes</h2>
+<p>I met the outcomes I planned in Module One. Outcome 4 is shown by the database techniques (validation, least-privilege roles, connection handling), and Outcome 5 by anticipating injection and misuse at the data layer. Outcome 3 is shown by the trade-offs: a stricter query interface protects the database but breaks callers that send unusual queries, so I documented the behavior change and kept the dashboard's own queries valid. Outcome 2 is addressed by this narrative and the README documentation. I have two updates to my plan. First, I planned to block a list of dangerous operators, but I implemented an allow-list instead, because a block-list fails the moment a new dangerous operator exists. Second, I added the read-only mode and database-level user, which were not in my original plan.</p>
+<p><strong>Outcome not fully met:</strong> My unit tests use an in-memory stand-in for the collection, so the database interaction has not been tested against a live MongoDB instance. The validation logic is verified, but its behavior against the real database is not.</p>
+<h2>Reflection</h2>
+<p>The most important lesson was that validation and permissions protect different things. The allow-list stops malicious queries, and the read-only database user limits the damage if something gets through, so each layer covers the other's failure. My own testing reinforced this. My first version allowed operators like $ne on delete, and a test showed that delete({"animal_id": {"$ne": ""}}) would match nearly every record and defeat my empty-filter guard. I fixed it by limiting update and delete to exact-match operators. I also learned that the original connection error handling never worked, because MongoClient connects lazily and the try/except could never catch a failed connection. The original also hid failures by returning empty results, so a broken database looked the same as a search with no matches.</p>
+<p>The main challenge was my development environment. Setting up MongoDB on the 2014 Intel iMac I’m using took longer than the coding, because Homebrew no longer supports intel macs, and I’m currently running the most recent OS via OpenCore Legacy Patcher. I eventually installed MongoDB directly and learned how authentication and the authSource option work. Because of this, my unit tests use an in-memory stand-in for the collection instead of a live server. They verify the validation logic, but they do not replace testing against a real MongoDB instance.</p>
+<p>I used Claude throughout this process as a debugging partner, explaining errors as I hit them and reviewing my own approaches before moving on. I acknowledge that use here, consistent with SNHU's generative AI usage guidelines.</p>
+</main>
+<footer>
+  <p><a href="index.html">Home</a> &middot; <a href="https://github.com/sldowd/ePortfolio">Source on GitHub</a></p>
+</footer>
+</body>
+</html>

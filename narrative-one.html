@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sarah Dowd | Enhancement One Narrative</title>
+  <meta name="description" content="Enhancement One: Software Design and Engineering. Narrative for CS-499 ePortfolio, Sarah Dowd.">
+  <style>
+    :root { --bg:#fafaf8; --text:#1d1d1f; --muted:#5c5c63; --accent:#1f4e79; --card:#ffffff; --border:#dcdcd6; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --bg:#16171a; --text:#ececec; --muted:#a6a6ad; --accent:#8fb8e0; --card:#1f2024; --border:#34363c; }
+    }
+    :root[data-theme="dark"] { --bg:#16171a; --text:#ececec; --muted:#a6a6ad; --accent:#8fb8e0; --card:#1f2024; --border:#34363c; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height:1.65; }
+    header, main, footer { max-width:760px; margin:0 auto; padding:0 16px; }
+    header { padding-top:32px; }
+    .back { font-size:0.95rem; font-weight:600; text-decoration:none; color:var(--accent); }
+    .back:hover, .back:focus { text-decoration:underline; }
+    .label { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:24px 0 4px; }
+    h1 { font-size:2rem; margin:0 0 6px; line-height:1.2; }
+    .subtitle { color:var(--muted); margin:0 0 8px; }
+    nav ul { list-style:none; display:flex; flex-wrap:wrap; gap:6px 16px; padding:0; margin:12px 0 0; font-size:0.95rem; }
+    nav a { color:var(--accent); text-decoration:none; }
+    nav a[aria-current="page"] { font-weight:700; color:var(--text); }
+    nav a:hover, nav a:focus { text-decoration:underline; }
+    h2 { font-size:1.35rem; margin:40px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+    p { margin:0 0 14px; }
+    strong { font-weight:650; }
+    a { color:var(--accent); }
+    pre { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:12px 14px; overflow-x:auto; font-size:0.9rem; line-height:1.5; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .data-table { width:100%; border-collapse:collapse; margin:8px 0 20px; font-size:0.95rem; }
+    .data-table th, .data-table td { border:1px solid var(--border); padding:8px 10px; text-align:left; }
+    .data-table th { background:var(--card); }
+    .figure { margin:24px 0 28px; text-align:center; }
+    .figure img { display:block; max-width:420px; width:100%; height:auto; margin:0 auto; border:1px solid var(--border); border-radius:6px; }
+    .figure figcaption { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+    footer { margin-top:48px; padding:16px 0 40px; border-top:1px solid var(--border); color:var(--muted); font-size:0.9rem; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">&larr; Back to home</a>
+  <p class="label">Enhancement One &middot; CS-499</p>
+  <h1>Enhancement One Narrative</h1>
+  <p class="subtitle">Enhancement One: Software Design and Engineering</p>
+  <nav aria-label="Enhancements"><ul><li><a href="enhancement-one.html" aria-current="page">Enhancement One</a></li><li><a href="enhancement-two.html">Enhancement Two</a></li><li><a href="enhancement-three.html">Enhancement Three</a></li></ul></nav>
+</header>
+<main>
+<h2>The Artifact</h2>
+<p>This artifact is Project Two, a client management application originally reverse engineered in CS-410 (Reverse Software Engineering) in C++ from a compiled binary file. The original version was structured around global scalar variables, had no separation between read and write access, accepted unvalidated integer input, and allowed unlimited login attempts. My CS-410 work refactored it into a two-class design (Customer/CustomerList), added input validation, and capped login attempts at three — but a formal vulnerability analysis from that course identified two further gaps that were documented but never implemented: the absence of password hashing/salting, and the absence of a role-based access control layer. This enhancement is where I closed both.</p>
+<h2>Why It Belongs in My ePortfolio and How It Was Improved</h2>
+<p>I selected this artifact because it lets the enhancement demonstrate a language-level security decision rather than a series of individual patches. Instead of fixing memory-safety issues in C++ one at a time, I ported the entire application to Rust, whose ownership and borrowing model enforces memory safety at compile time — closing an entire vulnerability class rather than specific instances of it.</p>
+<p>Specific improvements: I replaced the two previously unimplemented gaps directly. A Role enum (Admin/Viewer) and a gate on every mutating operation means only an authenticated Admin can change a customer's service — Viewers can read but not write, enforced by the type system rather than a convention a future developer could forget to check. The original program checked only the shared password and never looked at the username. The rewritten version finds the account first. If the username doesn’t exist, the program still runs an Argon2 verification against a dummy hash, then returns the same “Invalid username or password” message used for a wrong password. Response time is therefore about the same either way, so an attacker can’t tell which usernames exist by timing the response. The single hardcoded plaintext password ("123", shared by every user) is gone; each user now has an individually Argon2id-hashed credential, verified by the Argon2 library, which compares hashes in constant time instead of comparing plaintext the way the original's .compare() call did. I also replaced the original’s 1/2 magic-number service codes with a ServiceType enum. Once a value is a ServiceType, it can only be Brokerage or Retirement, so code that uses it can’t carry an invalid service. The raw number a user types still must be checked at runtime. ServiceType::from_int converts it and returns an error for anything other than 1 or 2, and Rust requires the caller to handle that result.</p>
+<h2>Course Outcomes</h2>
+<p>I met Course Outcome 3 (evaluating trade-offs in design choices) — the decision to do a full rewrite instead of incremental patching is explicit, not incidental, and I can point to the specific vulnerability classes it closes. I met Course Outcome 4 (well-founded, innovative techniques) through the migration itself, particularly using Result&lt;T, E&gt; for fallible operations in place of C++ exceptions, which changes how errors propagate through the program, not just how they're named. Course Outcome 5 runs through the whole enhancement, since every change — the RBAC gate, the hashing, the enum-enforced service type — is a security decision.</p>
+<p>One update to the original plan: my Module One proposal named password hashing and RBAC as the two gaps to close, but didn't separately call out that the original's single shared password meant there was no real per-user identity at all, only a shared secret. I treated that as in-scope alongside hashing, since Argon2id on a single shared password would have been a hashed version of the same underlying problem. I explicitly did not implement true account lockout/rate-limiting after failed attempts — that's a deliberate scope decision, documented here rather than an oversight, made in the interest of finishing the two higher-value fixes given the time available for this enhancement.</p>
+<p><strong>Feedback:</strong> included adding automated security tests for authorization boundaries and credential verification. A test suite is included with the rust port.</p>
+<p><strong>Outcomes not fully met:</strong> I did not implement account lockout or rate limiting after failed login attempts, so the program still allows repeated guessing beyond the three-attempt cap. The admin credential is also still a hardcoded hash in the source code, a known risk I would address before any production use.</p>
+<h2>Reflection</h2>
+<p>This was my first substantial project in Rust, and the challenges tracked pretty directly onto core language concepts rather than surface syntax. I hit repeated errors around the difference between &amp;self and &amp;mut self before the read/mutate distinction actually clicked; the difference between a type name and a constructed value (Vec&lt;Customer&gt; versus Vec::new()); why Result propagation via ? can't silently convert between unrelated error types; and why a function's last line determines its return value only when it isn't terminated with a semicolon. None of these are C++ concepts with a direct analog — they're closer to the compiler enforcing invariants that C++ would have quietly let me violate (returning a reference to data that's already been freed, for instance, which C++ permits as a dangling pointer and Rust refuses to compile).</p>
+<p>I also ran into a live dependency issue mid-implementation: adding the argon2 crate pulled its newest version, which had changed its password-hashing API in a way that broke every reference example I had, including ones from the crate's own documentation history. Resolving it meant learning to pin an exact crate version rather than assume "latest" is safe to add mid-project — a small but real lesson about dependency management that C++'s compile-and-link model doesn't really have an equivalent to.</p>
+<p>I used Claude throughout this process as a debugging partner — explaining compiler errors as I hit them, reviewing my own attempts at each method before I moved on, and helping me understand why something didn't compile rather than just supplying a fix — consistent with SNHU's generative AI usage guidelines, which I'm acknowledging here per that policy.</p>
+</main>
+<footer>
+  <p><a href="index.html">Home</a> &middot; <a href="https://github.com/sldowd/ePortfolio">Source on GitHub</a></p>
+</footer>
+</body>
+</html>
